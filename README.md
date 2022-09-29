@@ -120,3 +120,65 @@ _After_
     + Extending and adding custom queries with JPQL
     + Query Domain Specific Language (Query DSL)
 
++ Specify plural name / path with an annotation
+
+```Java
+@RepositoryRestResource(path="members")
+public interface EmployeeRepository extends JpaRepository <Employee, Interger>{
+}
+```
++ Now we have a path of `http://lcoalhoast:8080/members`
+
+
+**Pagination**
+
++ By default, Spring Data Rest will return the first 20 elements
+  + Page size = 20
+
++ We can navigate to the different pages of data using query param
+
+```HTTP
+htttp://localhost:8080/employees?page=0
+
+htttp://localhost:8080/employees?page=1
+
+...
+```
+
+**Spring Data REST Configuration**
+
++ Following properties available:application.properties
+
+| Name                               | Description                             |
+| ---------------------------------- | --------------------------------------- |
+| spring.data.rest.base-path         | Base path to expose repository resource |
+| spring.data.rest.default-page-size | Default size of page                    |
+| spring.data.rest.man-page-size     | Maximum size of page                    |
+| ...                                | ...                                     |
+
+
+**Sample Configuration**
+
+File:application.properties
+```properties
+spring.data.rest.base-path=/magic-api
+spring.data.rest.default-page-size=50
+```
+
++ `spring.data.rest.base-path=/magic-api` will give "http://localhost:8080/magic-api/employees
++ `spring.data.rest.default-page-size=50` Returns 50 elements per page
+
+**Sorting**
+
++ We can sort by property names of our entity
+  + In our Employee example, we have:**firstName, lastName** and **email**
+
++ Sort by last name(ascending is default)
+  + htttp://localhost:8080/employees?sort=lastName
+
++ Sort by first name , descending
+  + htttp://localhost:8080/employees?sort=firstName, desc
+
++ Sort by last name, then first name , ascending
+  + htttp://localhost:8080/employees?sort=lastName, firstName, asc
+
